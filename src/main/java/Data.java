@@ -31,7 +31,7 @@ public class Data {
 //        for(char tmp:summ.toCharArray()){
 //            System.out.println(Character.hashCode(tmp));
 //        }
-        this.summ = Integer.parseInt(summ.replace((char)0xa0,(char)0x20).replace(" ",""));
+        this.summ = Integer.parseInt(summ);
     }
 
     public String getSummOther() {

@@ -27,11 +27,11 @@ class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
         formattedValue = (formattedValue == null) ? "" : formattedValue;
         if (cellReference.equalsIgnoreCase(XLSData.creditCellOther)) {
-            extractedData.setSummOther(formattedValue.replaceAll(" ",""));
+            extractedData.setSummOther(formattedValue.replace((char)0xa0,(char)0x20).replace(" ",""));
         }
 
         if (cellReference.equalsIgnoreCase(XLSData.creditCell)) {
-            extractedData.setSumm(formattedValue.replaceAll(" ",""));
+            extractedData.setSumm(formattedValue.replace((char)0xa0,(char)0x20).replace(" ",""));
         }
 
         if (cellReference.equalsIgnoreCase(XLSData.fioCell)) {

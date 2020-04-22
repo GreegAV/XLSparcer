@@ -52,7 +52,7 @@ class FileUtils {
         List<Data> extractedData = new ArrayList<>();
         //Получаем имя папки
 //        String path = getDirName();
-        String path = "D:\\!!_XLSb\\1";
+        String path = "D:\\!!_XLSb";
         List<String> fileList = getListFiles(path);
 
         //Получаем и печатаем список файлов в полученной папке
