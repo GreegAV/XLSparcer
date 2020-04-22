@@ -1,6 +1,11 @@
 import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
 class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
 
     Data extractedData = new Data();
@@ -27,11 +32,11 @@ class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
         formattedValue = (formattedValue == null) ? "" : formattedValue;
         if (cellReference.equalsIgnoreCase(XLSData.creditCellOther)) {
-            extractedData.setSummOther(formattedValue.replace((char)0xa0,(char)0x20).replace(" ",""));
+            extractedData.setSummOther(Integer.parseInt(formattedValue.replace((char)0xa0,(char)0x20).replace(" ","")));
         }
 
         if (cellReference.equalsIgnoreCase(XLSData.creditCell)) {
-            extractedData.setSumm(formattedValue.replace((char)0xa0,(char)0x20).replace(" ",""));
+            extractedData.setSumm(Integer.parseInt(formattedValue.replace((char)0xa0,(char)0x20).replace(" ","")));
         }
 
         if (cellReference.equalsIgnoreCase(XLSData.fioCell)) {
@@ -39,7 +44,13 @@ class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
         }
 
         if (cellReference.equalsIgnoreCase(XLSData.dataCell)) {
-            extractedData.setDate(formattedValue.substring(4));
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy");
+            try {
+                extractedData.setDate(formatter.parse(formattedValue.substring(4)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

@@ -1,6 +1,9 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Data {
     private String fio;
-    private String date;
+    private Date date;
     private int summ;
     private int summOther;
 
@@ -15,31 +18,28 @@ public class Data {
         this.fio = fio;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
     public String getSumm() {
-        return ""+summ;
+        return "" + summ;
     }
 
-    public void setSumm(String summ) {
-//        for(char tmp:summ.toCharArray()){
-//            System.out.println(Character.hashCode(tmp));
-//        }
-        this.summ = Integer.parseInt(summ);
+    public void setSumm(int summ) {
+        this.summ = summ;
     }
 
-    public String getSummOther() {
-        return ""+summOther;
+    public int getSummOther() {
+        return summOther;
     }
 
-    public void setSummOther(String summOther) {
-        this.summOther = Integer.parseInt(summOther);
+    public void setSummOther(int summOther) {
+        this.summOther = summOther;
     }
 
     @Override
@@ -66,6 +66,6 @@ public class Data {
 
     @Override
     public String toString() {
-        return fio + ", " + date+ ", " +summ+ (summOther!=0?", "+summOther:"");
+        return fio + ", " + new SimpleDateFormat("dd-MM-yyyy").format(date) + ", " + summ + (summOther != 0 ? ", " + summOther : "");
     }
 }

@@ -12,6 +12,8 @@ import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 // Класс для загрузки данных из файла
@@ -112,13 +114,18 @@ class FileUtils {
         newData.setFio(cell.getStringCellValue());
 
         cell = sheet.getRow(Integer.parseInt(XLSData.dataRow) - 1).getCell(Integer.parseInt(XLSData.dataCol) - 1);
-        newData.setDate(String.valueOf(cell.getDateCellValue()));
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy");
+        try {
+            newData.setDate(formatter.parse(String.valueOf(cell.getDateCellValue()).substring(4)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         cell = sheet.getRow(Integer.parseInt(XLSData.creditCellSpendsRow) - 1).getCell(Integer.parseInt(XLSData.creditCellSpendsCol) - 1);
-        newData.setSumm(cell.getRawValue());
+        newData.setSumm(Integer.parseInt(cell.getRawValue()));
 
         cell = sheet.getRow(Integer.parseInt(XLSData.creditCellSpendsOtherRow) - 1).getCell(Integer.parseInt(XLSData.creditCellSpendsOtherCol) - 1);
-        newData.setSummOther(cell.getRawValue());
+        newData.setSummOther(Integer.parseInt(cell.getRawValue()));
 
         inputStream.close();
         extractedData.add(newData);
