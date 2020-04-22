@@ -1,7 +1,7 @@
 public class Data {
     private String fio;
     private String date;
-    private String summ;
+    private int summ;
     private int summOther;
 
     public Data() {
@@ -24,11 +24,14 @@ public class Data {
     }
 
     public String getSumm() {
-        return summ;
+        return ""+summ;
     }
 
     public void setSumm(String summ) {
-        this.summ = summ;
+//        for(char tmp:summ.toCharArray()){
+//            System.out.println(Character.hashCode(tmp));
+//        }
+        this.summ = Integer.parseInt(summ.replace((char)0xa0,(char)0x20).replace(" ",""));
     }
 
     public String getSummOther() {
@@ -46,17 +49,17 @@ public class Data {
 
         Data data = (Data) o;
 
+        if (summ != data.summ) return false;
         if (summOther != data.summOther) return false;
         if (fio != null ? !fio.equals(data.fio) : data.fio != null) return false;
-        if (date != null ? !date.equals(data.date) : data.date != null) return false;
-        return summ != null ? summ.equals(data.summ) : data.summ == null;
+        return date != null ? date.equals(data.date) : data.date == null;
     }
 
     @Override
     public int hashCode() {
         int result = fio != null ? fio.hashCode() : 0;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (summ != null ? summ.hashCode() : 0);
+        result = 31 * result + summ;
         result = 31 * result + summOther;
         return result;
     }

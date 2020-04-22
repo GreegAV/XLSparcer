@@ -52,7 +52,7 @@ class FileUtils {
         List<Data> extractedData = new ArrayList<>();
         //Получаем имя папки
 //        String path = getDirName();
-        String path = "D:\\!!_XLS";
+        String path = "D:\\!!_XLSb\\1";
         List<String> fileList = getListFiles(path);
 
         //Получаем и печатаем список файлов в полученной папке
@@ -85,7 +85,8 @@ class FileUtils {
                         new DataFormatter(),
                         false);
                 sheetHandler.parse();
-                System.out.println(testSheetHandler.extractedData);
+                extractedData.add(testSheetHandler.extractedData);
+//                System.out.println(testSheetHandler.extractedData);
             }
         } catch (IOException | OpenXML4JException | SAXException e) {
             e.printStackTrace();
@@ -121,7 +122,7 @@ class FileUtils {
 
         inputStream.close();
         extractedData.add(newData);
-        System.out.println(newData);
+//        System.out.println(newData);
     }
 
 
