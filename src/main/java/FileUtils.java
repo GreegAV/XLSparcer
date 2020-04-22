@@ -54,7 +54,7 @@ class FileUtils {
         List<Data> extractedData = new ArrayList<>();
         //Получаем имя папки
 //        String path = getDirName();
-        String path = "D:\\!!_XLSb";
+        String path = "D:\\!!_XLS";
         List<String> fileList = getListFiles(path);
 
         //Получаем и печатаем список файлов в полученной папке
@@ -87,8 +87,7 @@ class FileUtils {
                         new DataFormatter(),
                         false);
                 sheetHandler.parse();
-                extractedData.add(testSheetHandler.extractedData);
-//                System.out.println(testSheetHandler.extractedData);
+                extractedData.add(testSheetHandler.getExtractedData());
             }
         } catch (IOException | OpenXML4JException | SAXException e) {
             e.printStackTrace();
@@ -115,14 +114,14 @@ class FileUtils {
 
         cell = sheet.getRow(Integer.parseInt(XLSData.dataRow) - 1).getCell(Integer.parseInt(XLSData.dataCol) - 1);
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy");
-        try {
-            newData.setDate(formatter.parse(String.valueOf(cell.getDateCellValue()).substring(4)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+        newData.setDate(cell.getDateCellValue());
+
 
         cell = sheet.getRow(Integer.parseInt(XLSData.creditCellSpendsRow) - 1).getCell(Integer.parseInt(XLSData.creditCellSpendsCol) - 1);
-        newData.setSumm(Integer.parseInt(cell.getRawValue()));
+        String string = cell.getRawValue();
+        if (string.indexOf(".") > 0)
+            newData.setSumm(Integer.parseInt(string.substring(0, string.indexOf("."))));
 
         cell = sheet.getRow(Integer.parseInt(XLSData.creditCellSpendsOtherRow) - 1).getCell(Integer.parseInt(XLSData.creditCellSpendsOtherCol) - 1);
         newData.setSummOther(Integer.parseInt(cell.getRawValue()));

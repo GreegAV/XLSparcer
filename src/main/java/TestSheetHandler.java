@@ -3,20 +3,10 @@ import org.apache.poi.xssf.usermodel.XSSFComment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
-
-    Data extractedData = new Data();
-
-//    public void startSheet(String sheetName) {
-//        sb.append("\n<table>");
-//    }
-
-//    public void endSheet() {
-//        sb.append("\n</table>\n");
-//    }
+    private Data extractedData = new Data();
 
     @Override
     public void startRow(int rowNum) {
@@ -50,13 +40,13 @@ class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
     public Data getExtractedData(){
         return extractedData;
     }
+
     @Override
     public void headerFooter(String text, boolean isHeader, String tagName) {
 //        if (isHeader) {
