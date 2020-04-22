@@ -39,7 +39,7 @@ class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
         }
 
         if (cellReference.equalsIgnoreCase(XLSData.dataCell)) {
-            extractedData.setDate(formattedValue);
+            extractedData.setDate(formattedValue.substring(4));
         }
     }
 
