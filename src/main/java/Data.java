@@ -66,6 +66,6 @@ public class Data {
 
     @Override
     public String toString() {
-        return fio + ", " + new SimpleDateFormat("dd-MM-yyyy").format(date) + ", " + summ + (summOther != 0 ? ", " + summOther : "");
+        return fio + ", " + new SimpleDateFormat("dd-MM-yyyy").format(date) + ", " + summ +" UAH"+ (summOther != 0 ? ", " + summOther : "");
     }
 }
