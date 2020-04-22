@@ -3,15 +3,15 @@ import org.apache.poi.xssf.usermodel.XSSFComment;
 
 class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
 
-    private final StringBuilder sb = new StringBuilder();
+    Data extractedData = new Data();
 
-    public void startSheet(String sheetName) {
+//    public void startSheet(String sheetName) {
 //        sb.append("\n<table>");
-    }
+//    }
 
-    public void endSheet() {
+//    public void endSheet() {
 //        sb.append("\n</table>\n");
-    }
+//    }
 
     @Override
     public void startRow(int rowNum) {
@@ -25,30 +25,38 @@ class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
 
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
-        formattedValue = (formattedValue == null) ? "" : formattedValue;
-        if (comment == null) {
-            sb.append("\n<td ref=\"").append(cellReference).append("\">").append(formattedValue).append("</td>");
-        } else {
-            sb.append("\n<td ref=\"").append(cellReference).append("\">")
-                    .append(formattedValue)
-                    .append("<span type=\"comment\" author=\"")
-                    .append(comment.getAuthor()).append("\">")
-                    .append(comment.getString().toString().trim()).append("</span>")
-                    .append("</td>");
+        formattedValue = (formattedValue == null) ? "" : formattedValue.trim().stripTrailing();
+        if (cellReference.equalsIgnoreCase(XLSData.creditCellOther)) {
+            extractedData.setSummOther(formattedValue);
+        }
+
+        if (cellReference.equalsIgnoreCase(XLSData.creditCell)) {
+            extractedData.setSumm(formattedValue);
+        }
+
+        if (cellReference.equalsIgnoreCase(XLSData.fioCell)) {
+            extractedData.setFio(formattedValue);
+        }
+
+        if (cellReference.equalsIgnoreCase(XLSData.dataCell)) {
+            extractedData.setDate(formattedValue);
         }
     }
 
+    public Data getExtractedData(){
+        return extractedData;
+    }
     @Override
     public void headerFooter(String text, boolean isHeader, String tagName) {
-        if (isHeader) {
-            sb.append("<header tagName=\"").append(tagName).append("\">").append(text).append("</header>");
-        } else {
-            sb.append("<footer tagName=\"").append(tagName).append("\">").append(text).append("</footer>");
-        }
+//        if (isHeader) {
+//            sb.append("<header tagName=\"").append(tagName).append("\">").append(text).append("</header>");
+//        } else {
+//            sb.append("<footer tagName=\"").append(tagName).append("\">").append(text).append("</footer>");
+//        }
     }
 
     @Override
     public String toString() {
-        return sb.toString();
+        return extractedData.toString();
     }
 }

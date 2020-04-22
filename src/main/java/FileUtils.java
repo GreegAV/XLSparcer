@@ -1,5 +1,3 @@
-
-
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -15,7 +13,6 @@ import org.xml.sax.SAXException;
 import javax.swing.*;
 import java.io.*;
 import java.util.*;
-
 
 // Класс для загрузки данных из файла
 class FileUtils {
@@ -51,9 +48,9 @@ class FileUtils {
     }
 
     // загружаем данные из файла
-    static void loadFromFile() throws Exception {
+    static List<Data> loadFromFile() throws Exception {
+        List<Data> extractedData = new ArrayList<>();
         //Получаем имя папки
-
 //        String path = getDirName();
         String path = "D:\\!!_XLS";
         List<String> fileList = getListFiles(path);
@@ -64,14 +61,15 @@ class FileUtils {
         for (String tmpFileName : fileList) {
             System.out.println(tmpFileName);
             if (tmpFileName.toLowerCase().endsWith("xlsb")) {
-                processXSLBFile(tmpFileName);
+                processXSLBFile(tmpFileName, extractedData);
             } else {
-                processXSLXFile(tmpFileName);
+                processXSLXFile(tmpFileName, extractedData);
             }
         }
+        return extractedData;
     }
 
-    private static void processXSLBFile(String fileName) {
+    private static void processXSLBFile(String fileName, List<Data> extractedData) {
         try (OPCPackage pkg = OPCPackage.open(fileName)) {
             XSSFBReader r = new XSSFBReader(pkg);
             XSSFBSharedStringsTable sst = new XSSFBSharedStringsTable(pkg);
@@ -80,6 +78,8 @@ class FileUtils {
 
             while (it.hasNext()) {
                 InputStream is = it.next();
+
+
                 TestSheetHandler testSheetHandler = new TestSheetHandler();
                 XSSFBSheetHandler sheetHandler = new XSSFBSheetHandler(is,
                         xssfbStylesTable,
@@ -88,19 +88,17 @@ class FileUtils {
                         new DataFormatter(),
                         false);
                 sheetHandler.parse();
-                System.out.println(testSheetHandler.toString());
+                System.out.println(testSheetHandler.extractedData);
+                break;
             }
         } catch (IOException | OpenXML4JException | SAXException e) {
             e.printStackTrace();
         }
     }
 
-    private static void processXSLXFile(String fname) throws Exception {
+    private static void processXSLXFile(String fname, List<Data> extractedData) throws Exception {
         File file = new File(fname);
-        String fio;
-        String data;
-        String expences;
-        String expencesOther;
+        Data newData = new Data();
         XSSFCell cell;
         // Read XSL file
         FileInputStream inputStream = new FileInputStream(file);
@@ -114,39 +112,21 @@ class FileUtils {
         // Get data from certain cell
         // wb.getSheetAt(0).getRow(9).getCell(CellReference.convertColStringToIndex("E"));
         cell = sheet.getRow(Integer.parseInt(XLSData.fioRow) - 1).getCell(Integer.parseInt(XLSData.fioCol) - 1);
-        fio = cell.getStringCellValue();
+        newData.setFio(cell.getStringCellValue());
 
         cell = sheet.getRow(Integer.parseInt(XLSData.dataRow) - 1).getCell(Integer.parseInt(XLSData.dataCol) - 1);
-        data = String.valueOf(cell.getDateCellValue());
+        newData.setDate(String.valueOf(cell.getDateCellValue()));
 
         cell = sheet.getRow(Integer.parseInt(XLSData.creditCellSpendsRow) - 1).getCell(Integer.parseInt(XLSData.creditCellSpendsCol) - 1);
-        expences = cell.getRawValue();
+        newData.setSumm(cell.getRawValue());
 
         cell = sheet.getRow(Integer.parseInt(XLSData.creditCellSpendsOtherRow) - 1).getCell(Integer.parseInt(XLSData.creditCellSpendsOtherCol) - 1);
-        expencesOther = cell.getRawValue();
+        newData.setSummOther(cell.getRawValue());
 
         inputStream.close();
-        System.out.println("fio " + fio);
-        System.out.println("data " + data);
-        System.out.println("expences " + expences);
-        System.out.println("expencesOther " + expencesOther);
+        extractedData.add(newData);
+        System.out.println(newData);
     }
 
-//    private void processXLSBFile(File file) {
-//        WorkBook workBook = new WorkBook();
-//        String filePath = file.getAbsolutePath();
-//        if (FilenameUtils.getExtension(filePath).equalsIgnoreCase((Static.XLSB_EXT))) {
-//            try {
-//                workBook.readXLSB(new java.io.FileInputStream(filePath));
-//                filePath = filePath.replaceAll("(?i)".concat(Static.XLSB),
-//                        Static.XLSX_EXT.toLowerCase());
-//                workBook.writeXLSX(new java.io.FileOutputStream(filePath));
-//                final File xlsb = new File(filePath);
-//                file = xlsb;
-//            } catch (Exception e) {
-//                MensajesJSFUtil
-//                        .mostrarMensajeNegocio(new GTMException(e, ClaveMensaje.COMANDAS_ADJUNTAR_XLSBFILE_READERROR));
-//            }
-//        }
-//    }
+
 }
