@@ -25,13 +25,13 @@ class TestSheetHandler implements XSSFSheetXMLHandler.SheetContentsHandler {
 
     @Override
     public void cell(String cellReference, String formattedValue, XSSFComment comment) {
-        formattedValue = (formattedValue == null) ? "" : formattedValue.trim().stripTrailing();
+        formattedValue = (formattedValue == null) ? "" : formattedValue;
         if (cellReference.equalsIgnoreCase(XLSData.creditCellOther)) {
-            extractedData.setSummOther(formattedValue);
+            extractedData.setSummOther(formattedValue.replaceAll(" ",""));
         }
 
         if (cellReference.equalsIgnoreCase(XLSData.creditCell)) {
-            extractedData.setSumm(formattedValue);
+            extractedData.setSumm(formattedValue.replaceAll(" ",""));
         }
 
         if (cellReference.equalsIgnoreCase(XLSData.fioCell)) {

@@ -59,7 +59,6 @@ class FileUtils {
         getListFiles(path);
 
         for (String tmpFileName : fileList) {
-            System.out.println(tmpFileName);
             if (tmpFileName.toLowerCase().endsWith("xlsb")) {
                 processXSLBFile(tmpFileName, extractedData);
             } else {
@@ -76,10 +75,8 @@ class FileUtils {
             XSSFBStylesTable xssfbStylesTable = r.getXSSFBStylesTable();
             XSSFBReader.SheetIterator it = (XSSFBReader.SheetIterator) r.getSheetsData();
 
-            while (it.hasNext()) {
+            if (it.hasNext()) {
                 InputStream is = it.next();
-
-
                 TestSheetHandler testSheetHandler = new TestSheetHandler();
                 XSSFBSheetHandler sheetHandler = new XSSFBSheetHandler(is,
                         xssfbStylesTable,
@@ -89,7 +86,6 @@ class FileUtils {
                         false);
                 sheetHandler.parse();
                 System.out.println(testSheetHandler.extractedData);
-                break;
             }
         } catch (IOException | OpenXML4JException | SAXException e) {
             e.printStackTrace();
